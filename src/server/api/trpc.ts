@@ -13,6 +13,7 @@ import { ZodError } from "zod";
 
 import { auth } from "~/server/better-auth";
 import { db } from "~/server/db";
+import type { UserRole } from "../../../generated/prisma";
 
 /**
  * 1. CONTEXT
@@ -81,9 +82,6 @@ export const createTRPCRouter = t.router;
 
 /**
  * Middleware for timing procedure execution and adding an artificial delay in development.
- *
- * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
- * network latency that would occur in production but not in local development.
  */
 const timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now();
@@ -104,20 +102,13 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 
 /**
  * Public (unauthenticated) procedure
- *
- * This is the base piece you use to build new queries and mutations on your tRPC API. It does not
- * guarantee that a user querying is authorized, but you can still access user session data if they
- * are logged in.
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
 
 /**
  * Protected (authenticated) procedure
  *
- * If you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
- * the session is valid and guarantees `ctx.session.user` is not null.
- *
- * @see https://trpc.io/docs/procedures
+ * Verifies the session is valid and guarantees `ctx.session.user` is not null.
  */
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
@@ -127,8 +118,82 @@ export const protectedProcedure = t.procedure
     }
     return next({
       ctx: {
-        // infers the `session` as non-nullable
         session: { ...ctx.session, user: ctx.session.user },
       },
     });
   });
+
+/**
+ * Org-protected procedure
+ *
+ * Requires auth + org membership. Provides `ctx.orgId` for downstream use.
+ */
+export const orgProtectedProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(async ({ ctx, next }) => {
+    if (!ctx.session?.user) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+
+    const user = await ctx.db.user.findUnique({
+      where: { id: ctx.session.user.id },
+    });
+
+    if (!user?.orgId) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "You must belong to an organization",
+      });
+    }
+
+    return next({
+      ctx: {
+        session: { ...ctx.session, user: ctx.session.user },
+        orgId: user.orgId,
+        userRole: user.role,
+        userId: user.id,
+      },
+    });
+  });
+
+/**
+ * Role-protected procedure factory
+ *
+ * Creates a procedure that requires specific roles.
+ */
+export function roleProtectedProcedure(...allowedRoles: UserRole[]) {
+  return t.procedure
+    .use(timingMiddleware)
+    .use(async ({ ctx, next }) => {
+      if (!ctx.session?.user) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      const user = await ctx.db.user.findUnique({
+        where: { id: ctx.session.user.id },
+      });
+
+      if (!user?.orgId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You must belong to an organization",
+        });
+      }
+
+      if (!allowedRoles.includes(user.role)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You do not have the required role",
+        });
+      }
+
+      return next({
+        ctx: {
+          session: { ...ctx.session, user: ctx.session.user },
+          orgId: user.orgId,
+          userRole: user.role,
+          userId: user.id,
+        },
+      });
+    });
+}

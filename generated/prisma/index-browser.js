@@ -121,14 +121,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.PostScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdById: 'createdById'
-};
-
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -136,7 +128,9 @@ exports.Prisma.UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  role: 'role',
+  orgId: 'orgId'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -175,9 +169,106 @@ exports.Prisma.VerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.OrganizationScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  email: 'email',
+  phone: 'phone'
+};
+
+exports.Prisma.ClientScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  preferredName: 'preferredName',
+  email: 'email',
+  phoneNumber: 'phoneNumber',
+  orgId: 'orgId',
+  authorId: 'authorId'
+};
+
+exports.Prisma.TemplateScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  content: 'content',
+  orgId: 'orgId',
+  authorId: 'authorId'
+};
+
+exports.Prisma.VoiceCloneScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  description: 'description',
+  cloneProvider: 'cloneProvider',
+  providerId: 'providerId',
+  orgId: 'orgId',
+  authorId: 'authorId'
+};
+
+exports.Prisma.VoiceSampleScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  filename: 'filename',
+  name: 'name',
+  description: 'description',
+  storageKey: 'storageKey',
+  orgId: 'orgId',
+  authorId: 'authorId'
+};
+
+exports.Prisma.ScheduledReminderScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  timeZone: 'timeZone',
+  appointmentTime: 'appointmentTime',
+  reminderOffset: 'reminderOffset',
+  status: 'status',
+  attempts: 'attempts',
+  lastAttempt: 'lastAttempt',
+  orgId: 'orgId',
+  userId: 'userId',
+  clientId: 'clientId',
+  templateId: 'templateId',
+  voiceId: 'voiceId'
+};
+
+exports.Prisma.TransactionOutboxScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  eventType: 'eventType',
+  payload: 'payload',
+  status: 'status',
+  error: 'error',
+  retries: 'retries'
+};
+
+exports.Prisma.ProviderApiKeyScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  provider: 'provider',
+  apiKey: 'apiKey',
+  orgId: 'orgId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.JsonNullValueInput = {
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -190,13 +281,57 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+exports.UserRole = exports.$Enums.UserRole = {
+  ADMIN: 'ADMIN',
+  POWER_USER: 'POWER_USER',
+  USER: 'USER'
+};
+
+exports.CloneProvider = exports.$Enums.CloneProvider = {
+  ELEVENLABS: 'ELEVENLABS'
+};
+
+exports.ReminderOffset = exports.$Enums.ReminderOffset = {
+  DAY_BEFORE_MORNING: 'DAY_BEFORE_MORNING',
+  DAY_BEFORE_AFTERNOON: 'DAY_BEFORE_AFTERNOON',
+  DAY_BEFORE_EVENING: 'DAY_BEFORE_EVENING'
+};
+
+exports.CallStatus = exports.$Enums.CallStatus = {
+  NOT_STARTED: 'NOT_STARTED',
+  STARTED: 'STARTED',
+  COMPLETED: 'COMPLETED',
+  BUSY: 'BUSY',
+  NO_ANSWER: 'NO_ANSWER',
+  CANCELLED: 'CANCELLED',
+  FAILED: 'FAILED'
+};
+
+exports.TransactionStatus = exports.$Enums.TransactionStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
 
 exports.Prisma.ModelName = {
-  Post: 'Post',
   User: 'User',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Organization: 'Organization',
+  Client: 'Client',
+  Template: 'Template',
+  VoiceClone: 'VoiceClone',
+  VoiceSample: 'VoiceSample',
+  ScheduledReminder: 'ScheduledReminder',
+  TransactionOutbox: 'TransactionOutbox',
+  ProviderApiKey: 'ProviderApiKey'
 };
 
 /**
