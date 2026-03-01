@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { FormField } from "~/components/forms/form-field";
 import { createOrganizationSchema } from "~/shared/schemas";
 import { api } from "~/trpc/react";
+import { ROUTES } from "~/shared/constants";
 import { zodFormValidator } from "~/shared/schemas/form-validator";
 
 export default function OnboardingPage() {
@@ -14,7 +15,7 @@ export default function OnboardingPage() {
 
   const createOrg = api.organization.create.useMutation({
     onSuccess: () => {
-      router.push("/dashboard");
+      router.push(ROUTES.DASHBOARD);
     },
   });
 

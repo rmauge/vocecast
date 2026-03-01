@@ -3,6 +3,7 @@ import { SidebarProvider } from "~/components/ui/sidebar";
 import { DashboardSidebar } from "~/components/layout/dashboard-sidebar";
 import { getSession } from "~/server/better-auth/server";
 import { db } from "~/server/db";
+import { ROUTES } from "~/shared/constants";
 
 export default async function DashboardLayout({
   children,
@@ -12,7 +13,7 @@ export default async function DashboardLayout({
   const session = await getSession();
 
   if (!session?.user) {
-    redirect("/login");
+    redirect(ROUTES.LOGIN);
   }
 
   // Fetch the full user to get role and orgId
@@ -21,7 +22,7 @@ export default async function DashboardLayout({
   });
 
   if (!user?.orgId) {
-    redirect("/onboarding");
+    redirect(ROUTES.ONBOARDING);
   }
 
   return (

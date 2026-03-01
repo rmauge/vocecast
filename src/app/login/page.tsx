@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation";
 import { auth } from "~/server/better-auth";
 import { getSession } from "~/server/better-auth/server";
+import { ROUTES } from "~/shared/constants";
 
 export default async function LoginPage() {
   const session = await getSession();
 
   if (session?.user) {
-    redirect("/dashboard");
+    redirect(ROUTES.DASHBOARD);
   }
 
   return (

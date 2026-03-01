@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "~/server/better-auth";
 import { getSession } from "~/server/better-auth/server";
+import { ROUTES } from "~/shared/constants";
 
 export default async function Home() {
   const session = await getSession();
@@ -45,7 +46,7 @@ export default async function Home() {
           ) : (
             <div className="flex gap-4">
               <Link
-                href="/dashboard"
+                href={ROUTES.DASHBOARD}
                 className="rounded-full bg-[hsl(280,100%,70%)] px-10 py-3 font-semibold text-white no-underline transition hover:bg-[hsl(280,100%,60%)]"
               >
                 Go to Dashboard
@@ -58,7 +59,7 @@ export default async function Home() {
                     await auth.api.signOut({
                       headers: await headers(),
                     });
-                    redirect("/");
+                    redirect(ROUTES.HOME);
                   }}
                 >
                   Sign out

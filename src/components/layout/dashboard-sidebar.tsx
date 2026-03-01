@@ -13,6 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
+import { ROUTES } from "~/shared/constants";
 import type { UserRole } from "../../../generated/prisma";
 
 interface NavItem {
@@ -22,13 +23,13 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { title: "Overview", href: "/dashboard" },
-  { title: "Clients", href: "/dashboard/clients" },
-  { title: "Templates", href: "/dashboard/templates" },
-  { title: "Voices", href: "/dashboard/voices" },
-  { title: "Messaging", href: "/dashboard/messaging" },
-  { title: "Users", href: "/dashboard/users", roles: ["ADMIN"] },
-  { title: "Settings", href: "/dashboard/settings", roles: ["ADMIN"] },
+  { title: "Overview", href: ROUTES.DASHBOARD },
+  { title: "Clients", href: ROUTES.CLIENTS },
+  { title: "Templates", href: ROUTES.TEMPLATES },
+  { title: "Voices", href: ROUTES.VOICES },
+  { title: "Messaging", href: ROUTES.MESSAGING },
+  { title: "Users", href: ROUTES.USERS, roles: ["ADMIN"] },
+  { title: "Settings", href: ROUTES.SETTINGS, roles: ["ADMIN"] },
 ];
 
 interface DashboardSidebarProps {
@@ -45,7 +46,7 @@ export function DashboardSidebar({ userRole }: DashboardSidebarProps) {
   return (
     <Sidebar>
       <SidebarHeader className="border-b px-6 py-4">
-        <Link href="/dashboard" className="text-xl font-bold">
+        <Link href={ROUTES.DASHBOARD} className="text-xl font-bold">
           Vocecast
         </Link>
       </SidebarHeader>
@@ -59,8 +60,8 @@ export function DashboardSidebar({ userRole }: DashboardSidebarProps) {
                   <SidebarMenuButton
                     asChild
                     isActive={
-                      item.href === "/dashboard"
-                        ? pathname === "/dashboard"
+                      item.href === ROUTES.DASHBOARD
+                        ? pathname === ROUTES.DASHBOARD
                         : pathname.startsWith(item.href)
                     }
                   >
