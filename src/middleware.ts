@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 import { API, ROUTES } from "~/shared/constants";
 
 export function middleware(request: NextRequest) {
@@ -10,14 +11,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Protect dashboard routes
+  // Optimistic redirect for unauthenticated users.
+  // getSessionCookie() only checks cookie existence, not validity —
+  // real auth enforcement happens server-side in the dashboard layout and tRPC procedures.
   if (pathname.startsWith(ROUTES.DASHBOARD)) {
-    // Check for Better Auth session cookie
-    const sessionToken =
-      request.cookies.get("better-auth.session_token")?.value ??
-      request.cookies.get("__Secure-better-auth.session_token")?.value;
+    const sessionCookie = getSessionCookie(request);
 
-    if (!sessionToken) {
+    if (!sessionCookie) {
       const loginUrl = new URL(ROUTES.LOGIN, request.url);
       loginUrl.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(loginUrl);
