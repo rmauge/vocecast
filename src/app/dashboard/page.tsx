@@ -1,63 +1,43 @@
-"use client";
-
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Suspense } from "react";
+import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { PageHeader } from "~/components/layout/page-header";
-import { api } from "~/trpc/react";
+import { Skeleton } from "~/components/ui/skeleton";
+import { api, HydrateClient } from "~/trpc/server";
+import { DashboardStats } from "./_components/dashboard-stats";
 
-export default function DashboardPage() {
-  const clientCount = api.clients.count.useQuery();
-  const templateCount = api.template.count.useQuery();
+export default async function DashboardPage() {
+  void api.clients.count.prefetch();
+  void api.template.count.prefetch();
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Dashboard"
-        description="Overview of your Vocecast workspace"
-      />
+    <HydrateClient>
+      <div className="space-y-6">
+        <PageHeader
+          title="Dashboard"
+          description="Overview of your Vocecast workspace"
+        />
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Clients</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {clientCount.data ?? "..."}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Templates</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {templateCount.data ?? "..."}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Voice Clones</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">-</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">
-              Scheduled Reminders
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">-</div>
-          </CardContent>
-        </Card>
+        <Suspense fallback={<DashboardStatsSkeleton />}>
+          <DashboardStats />
+        </Suspense>
       </div>
+    </HydrateClient>
+  );
+}
+
+function DashboardStatsSkeleton() {
+  return (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <Card key={i}>
+          <CardHeader className="pb-2">
+            <Skeleton className="h-4 w-24" />
+          </CardHeader>
+          <CardContent>
+            <Skeleton className="h-8 w-16" />
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }
