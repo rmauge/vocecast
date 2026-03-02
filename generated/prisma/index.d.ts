@@ -6762,6 +6762,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     phone: string | null
+    outboundPhone: string | null
   }
 
   export type OrganizationMaxAggregateOutputType = {
@@ -6771,6 +6772,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     phone: string | null
+    outboundPhone: string | null
   }
 
   export type OrganizationCountAggregateOutputType = {
@@ -6780,6 +6782,7 @@ export namespace Prisma {
     name: number
     email: number
     phone: number
+    outboundPhone: number
     _all: number
   }
 
@@ -6791,6 +6794,7 @@ export namespace Prisma {
     name?: true
     email?: true
     phone?: true
+    outboundPhone?: true
   }
 
   export type OrganizationMaxAggregateInputType = {
@@ -6800,6 +6804,7 @@ export namespace Prisma {
     name?: true
     email?: true
     phone?: true
+    outboundPhone?: true
   }
 
   export type OrganizationCountAggregateInputType = {
@@ -6809,6 +6814,7 @@ export namespace Prisma {
     name?: true
     email?: true
     phone?: true
+    outboundPhone?: true
     _all?: true
   }
 
@@ -6891,6 +6897,7 @@ export namespace Prisma {
     name: string
     email: string | null
     phone: string | null
+    outboundPhone: string | null
     _count: OrganizationCountAggregateOutputType | null
     _min: OrganizationMinAggregateOutputType | null
     _max: OrganizationMaxAggregateOutputType | null
@@ -6917,6 +6924,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    outboundPhone?: boolean
     users?: boolean | Organization$usersArgs<ExtArgs>
     clients?: boolean | Organization$clientsArgs<ExtArgs>
     templates?: boolean | Organization$templatesArgs<ExtArgs>
@@ -6933,6 +6941,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    outboundPhone?: boolean
   }, ExtArgs["result"]["organization"]>
 
   export type OrganizationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6942,6 +6951,7 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    outboundPhone?: boolean
   }, ExtArgs["result"]["organization"]>
 
   export type OrganizationSelectScalar = {
@@ -6951,9 +6961,10 @@ export namespace Prisma {
     name?: boolean
     email?: boolean
     phone?: boolean
+    outboundPhone?: boolean
   }
 
-  export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "email" | "phone", ExtArgs["result"]["organization"]>
+  export type OrganizationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "email" | "phone" | "outboundPhone", ExtArgs["result"]["organization"]>
   export type OrganizationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Organization$usersArgs<ExtArgs>
     clients?: boolean | Organization$clientsArgs<ExtArgs>
@@ -6983,6 +6994,7 @@ export namespace Prisma {
       name: string
       email: string | null
       phone: string | null
+      outboundPhone: string | null
     }, ExtArgs["result"]["organization"]>
     composites: {}
   }
@@ -7418,6 +7430,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Organization", 'String'>
     readonly email: FieldRef<"Organization", 'String'>
     readonly phone: FieldRef<"Organization", 'String'>
+    readonly outboundPhone: FieldRef<"Organization", 'String'>
   }
     
 
@@ -15957,7 +15970,8 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     name: 'name',
     email: 'email',
-    phone: 'phone'
+    phone: 'phone',
+    outboundPhone: 'outboundPhone'
   };
 
   export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
@@ -16588,6 +16602,7 @@ export namespace Prisma {
     name?: StringFilter<"Organization"> | string
     email?: StringNullableFilter<"Organization"> | string | null
     phone?: StringNullableFilter<"Organization"> | string | null
+    outboundPhone?: StringNullableFilter<"Organization"> | string | null
     users?: UserListRelationFilter
     clients?: ClientListRelationFilter
     templates?: TemplateListRelationFilter
@@ -16603,6 +16618,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
+    outboundPhone?: SortOrderInput | SortOrder
     users?: UserOrderByRelationAggregateInput
     clients?: ClientOrderByRelationAggregateInput
     templates?: TemplateOrderByRelationAggregateInput
@@ -16621,6 +16637,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Organization"> | Date | string
     name?: StringFilter<"Organization"> | string
     phone?: StringNullableFilter<"Organization"> | string | null
+    outboundPhone?: StringNullableFilter<"Organization"> | string | null
     users?: UserListRelationFilter
     clients?: ClientListRelationFilter
     templates?: TemplateListRelationFilter
@@ -16636,6 +16653,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
+    outboundPhone?: SortOrderInput | SortOrder
     _count?: OrganizationCountOrderByAggregateInput
     _max?: OrganizationMaxOrderByAggregateInput
     _min?: OrganizationMinOrderByAggregateInput
@@ -16651,6 +16669,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Organization"> | string
     email?: StringNullableWithAggregatesFilter<"Organization"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Organization"> | string | null
+    outboundPhone?: StringNullableWithAggregatesFilter<"Organization"> | string | null
   }
 
   export type ClientWhereInput = {
@@ -17572,6 +17591,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserCreateNestedManyWithoutOrgInput
     clients?: ClientCreateNestedManyWithoutOrgInput
     templates?: TemplateCreateNestedManyWithoutOrgInput
@@ -17587,6 +17607,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserUncheckedCreateNestedManyWithoutOrgInput
     clients?: ClientUncheckedCreateNestedManyWithoutOrgInput
     templates?: TemplateUncheckedCreateNestedManyWithoutOrgInput
@@ -17602,6 +17623,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUpdateManyWithoutOrgNestedInput
     clients?: ClientUpdateManyWithoutOrgNestedInput
     templates?: TemplateUpdateManyWithoutOrgNestedInput
@@ -17617,6 +17639,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUncheckedUpdateManyWithoutOrgNestedInput
     clients?: ClientUncheckedUpdateManyWithoutOrgNestedInput
     templates?: TemplateUncheckedUpdateManyWithoutOrgNestedInput
@@ -17632,6 +17655,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
   }
 
   export type OrganizationUpdateManyMutationInput = {
@@ -17641,6 +17665,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type OrganizationUncheckedUpdateManyInput = {
@@ -17650,6 +17675,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ClientCreateInput = {
@@ -18632,6 +18658,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    outboundPhone?: SortOrder
   }
 
   export type OrganizationMaxOrderByAggregateInput = {
@@ -18641,6 +18668,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    outboundPhone?: SortOrder
   }
 
   export type OrganizationMinOrderByAggregateInput = {
@@ -18650,6 +18678,7 @@ export namespace Prisma {
     name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
+    outboundPhone?: SortOrder
   }
 
   export type OrganizationScalarRelationFilter = {
@@ -20281,6 +20310,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     clients?: ClientCreateNestedManyWithoutOrgInput
     templates?: TemplateCreateNestedManyWithoutOrgInput
     voiceClones?: VoiceCloneCreateNestedManyWithoutOrgInput
@@ -20295,6 +20325,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     clients?: ClientUncheckedCreateNestedManyWithoutOrgInput
     templates?: TemplateUncheckedCreateNestedManyWithoutOrgInput
     voiceClones?: VoiceCloneUncheckedCreateNestedManyWithoutOrgInput
@@ -20527,6 +20558,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     clients?: ClientUpdateManyWithoutOrgNestedInput
     templates?: TemplateUpdateManyWithoutOrgNestedInput
     voiceClones?: VoiceCloneUpdateManyWithoutOrgNestedInput
@@ -20541,6 +20573,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     clients?: ClientUncheckedUpdateManyWithoutOrgNestedInput
     templates?: TemplateUncheckedUpdateManyWithoutOrgNestedInput
     voiceClones?: VoiceCloneUncheckedUpdateManyWithoutOrgNestedInput
@@ -21236,6 +21269,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserCreateNestedManyWithoutOrgInput
     templates?: TemplateCreateNestedManyWithoutOrgInput
     voiceClones?: VoiceCloneCreateNestedManyWithoutOrgInput
@@ -21250,6 +21284,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserUncheckedCreateNestedManyWithoutOrgInput
     templates?: TemplateUncheckedCreateNestedManyWithoutOrgInput
     voiceClones?: VoiceCloneUncheckedCreateNestedManyWithoutOrgInput
@@ -21361,6 +21396,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUpdateManyWithoutOrgNestedInput
     templates?: TemplateUpdateManyWithoutOrgNestedInput
     voiceClones?: VoiceCloneUpdateManyWithoutOrgNestedInput
@@ -21375,6 +21411,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUncheckedUpdateManyWithoutOrgNestedInput
     templates?: TemplateUncheckedUpdateManyWithoutOrgNestedInput
     voiceClones?: VoiceCloneUncheckedUpdateManyWithoutOrgNestedInput
@@ -21470,6 +21507,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserCreateNestedManyWithoutOrgInput
     clients?: ClientCreateNestedManyWithoutOrgInput
     voiceClones?: VoiceCloneCreateNestedManyWithoutOrgInput
@@ -21484,6 +21522,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserUncheckedCreateNestedManyWithoutOrgInput
     clients?: ClientUncheckedCreateNestedManyWithoutOrgInput
     voiceClones?: VoiceCloneUncheckedCreateNestedManyWithoutOrgInput
@@ -21595,6 +21634,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUpdateManyWithoutOrgNestedInput
     clients?: ClientUpdateManyWithoutOrgNestedInput
     voiceClones?: VoiceCloneUpdateManyWithoutOrgNestedInput
@@ -21609,6 +21649,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUncheckedUpdateManyWithoutOrgNestedInput
     clients?: ClientUncheckedUpdateManyWithoutOrgNestedInput
     voiceClones?: VoiceCloneUncheckedUpdateManyWithoutOrgNestedInput
@@ -21684,6 +21725,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserCreateNestedManyWithoutOrgInput
     clients?: ClientCreateNestedManyWithoutOrgInput
     templates?: TemplateCreateNestedManyWithoutOrgInput
@@ -21698,6 +21740,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserUncheckedCreateNestedManyWithoutOrgInput
     clients?: ClientUncheckedCreateNestedManyWithoutOrgInput
     templates?: TemplateUncheckedCreateNestedManyWithoutOrgInput
@@ -21809,6 +21852,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUpdateManyWithoutOrgNestedInput
     clients?: ClientUpdateManyWithoutOrgNestedInput
     templates?: TemplateUpdateManyWithoutOrgNestedInput
@@ -21823,6 +21867,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUncheckedUpdateManyWithoutOrgNestedInput
     clients?: ClientUncheckedUpdateManyWithoutOrgNestedInput
     templates?: TemplateUncheckedUpdateManyWithoutOrgNestedInput
@@ -21898,6 +21943,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserCreateNestedManyWithoutOrgInput
     clients?: ClientCreateNestedManyWithoutOrgInput
     templates?: TemplateCreateNestedManyWithoutOrgInput
@@ -21912,6 +21958,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserUncheckedCreateNestedManyWithoutOrgInput
     clients?: ClientUncheckedCreateNestedManyWithoutOrgInput
     templates?: TemplateUncheckedCreateNestedManyWithoutOrgInput
@@ -21981,6 +22028,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUpdateManyWithoutOrgNestedInput
     clients?: ClientUpdateManyWithoutOrgNestedInput
     templates?: TemplateUpdateManyWithoutOrgNestedInput
@@ -21995,6 +22043,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUncheckedUpdateManyWithoutOrgNestedInput
     clients?: ClientUncheckedUpdateManyWithoutOrgNestedInput
     templates?: TemplateUncheckedUpdateManyWithoutOrgNestedInput
@@ -22242,6 +22291,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserCreateNestedManyWithoutOrgInput
     clients?: ClientCreateNestedManyWithoutOrgInput
     templates?: TemplateCreateNestedManyWithoutOrgInput
@@ -22256,6 +22306,7 @@ export namespace Prisma {
     name: string
     email?: string | null
     phone?: string | null
+    outboundPhone?: string | null
     users?: UserUncheckedCreateNestedManyWithoutOrgInput
     clients?: ClientUncheckedCreateNestedManyWithoutOrgInput
     templates?: TemplateUncheckedCreateNestedManyWithoutOrgInput
@@ -22286,6 +22337,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUpdateManyWithoutOrgNestedInput
     clients?: ClientUpdateManyWithoutOrgNestedInput
     templates?: TemplateUpdateManyWithoutOrgNestedInput
@@ -22300,6 +22352,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
+    outboundPhone?: NullableStringFieldUpdateOperationsInput | string | null
     users?: UserUncheckedUpdateManyWithoutOrgNestedInput
     clients?: ClientUncheckedUpdateManyWithoutOrgNestedInput
     templates?: TemplateUncheckedUpdateManyWithoutOrgNestedInput

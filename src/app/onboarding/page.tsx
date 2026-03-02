@@ -24,6 +24,7 @@ export default function OnboardingPage() {
       name: "",
       email: "",
       phone: "",
+      outboundPhone: "",
     },
     validators: {
       onSubmit: zodFormValidator(createOrganizationSchema),
@@ -76,6 +77,17 @@ export default function OnboardingPage() {
                 <FormField
                   field={field}
                   label="Phone Number"
+                  type="tel"
+                  placeholder="+15551234567"
+                />
+              )}
+            </form.Field>
+
+            <form.Field name="outboundPhone">
+              {(field) => (
+                <FormField
+                  field={field}
+                  label="Outbound Phone Number"
                   type="tel"
                   placeholder="+15551234567"
                 />

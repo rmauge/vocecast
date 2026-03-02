@@ -4,12 +4,14 @@ export interface CreateOrganizationInput {
   name: string;
   email?: string;
   phone?: string;
+  outboundPhone?: string;
 }
 
 export interface UpdateOrganizationInput {
   name?: string;
   email?: string;
   phone?: string;
+  outboundPhone?: string;
 }
 
 export interface IOrganizationService {

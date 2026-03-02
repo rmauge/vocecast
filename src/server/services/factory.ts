@@ -2,6 +2,7 @@ import { db } from "~/server/db";
 import type { IVoiceProviderService } from "./interfaces/voice-provider.service";
 import type { ICallProviderService } from "./interfaces/call-provider.service";
 import type { IStorageProviderService } from "./interfaces/storage-provider.service";
+import { CallProviderHealthService } from "./implementations/call-provider-health.service";
 
 interface ServiceFactoryOptions {
   elevenlabsApiKey?: string;
@@ -10,6 +11,8 @@ interface ServiceFactoryOptions {
   awsRegion?: string;
   awsBucket?: string;
 }
+
+export const callProviderHealthService = new CallProviderHealthService();
 
 /**
  * Creates service instances. Supports BYOK (Bring Your Own Key) by accepting
@@ -39,6 +42,33 @@ export function createCallProviderService(
   const token = opts?.twilioAuthToken ?? process.env.TWILIO_AUTH_TOKEN;
   if (!sid || !token) throw new Error("TWILIO credentials are required");
   return new TwilioCallProviderService(sid, token);
+}
+
+function createPlivoCallProviderService(): ICallProviderService {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { PlivoCallProviderService } = require("./implementations/plivo/call-provider.service") as {
+    PlivoCallProviderService: new (authId: string, authToken: string, answerBaseUrl: string) => ICallProviderService;
+  };
+  const authId = process.env.PLIVO_AUTH_ID;
+  const authToken = process.env.PLIVO_AUTH_TOKEN;
+  const baseUrl = process.env.BETTER_AUTH_BASE_URL;
+  if (!authId || !authToken) throw new Error("PLIVO credentials are required");
+  if (!baseUrl) throw new Error("BETTER_AUTH_BASE_URL is required for Plivo answer webhook");
+  return new PlivoCallProviderService(authId, authToken, baseUrl);
+}
+
+/**
+ * Creates a call provider with automatic failover.
+ * Uses Twilio by default; falls back to Plivo if Twilio is unhealthy.
+ */
+export async function createCallProviderWithFailover(
+  opts?: ServiceFactoryOptions,
+): Promise<ICallProviderService> {
+  const twilioHealthy = await callProviderHealthService.isHealthy("twilio");
+  if (twilioHealthy) {
+    return createCallProviderService(opts);
+  }
+  return createPlivoCallProviderService();
 }
 
 export function createStorageProviderService(
@@ -71,7 +101,7 @@ export async function createOrgServiceFactory(orgId: string) {
         elevenlabsApiKey: keyMap.get("elevenlabs"),
       }),
     callProvider: () =>
-      createCallProviderService({
+      createCallProviderWithFailover({
         twilioAccountSid: keyMap.get("twilio_sid"),
         twilioAuthToken: keyMap.get("twilio_token"),
       }),

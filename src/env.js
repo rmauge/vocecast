@@ -23,6 +23,10 @@ export const env = createEnv({
     TWILIO_ACCOUNT_SID: z.string().optional(),
     TWILIO_AUTH_TOKEN: z.string().optional(),
 
+    // Plivo (failover)
+    PLIVO_AUTH_ID: z.string().optional(),
+    PLIVO_AUTH_TOKEN: z.string().optional(),
+
     // AWS S3
     AWS_S3_BUCKET: z.string().optional(),
     AWS_REGION: z.string().optional(),
@@ -55,6 +59,8 @@ export const env = createEnv({
     ELEVENLABS_API_KEY: process.env.ELEVENLABS_API_KEY,
     TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
     TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+    PLIVO_AUTH_ID: process.env.PLIVO_AUTH_ID,
+    PLIVO_AUTH_TOKEN: process.env.PLIVO_AUTH_TOKEN,
     AWS_S3_BUCKET: process.env.AWS_S3_BUCKET,
     AWS_REGION: process.env.AWS_REGION,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,

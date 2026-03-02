@@ -2,8 +2,9 @@ import { inngest } from "../client";
 import { db } from "~/server/db";
 import {
   templateService,
+  organizationService,
   createVoiceProviderService,
-  createCallProviderService,
+  createCallProviderWithFailover,
   createStorageProviderService,
 } from "~/server/services";
 
@@ -22,6 +23,7 @@ interface LoadedReminder {
   voiceProviderId: string;
   appointmentTime: string;
   orgId: string;
+  orgOutboundPhone: string;
   userId: string;
 }
 
@@ -32,7 +34,7 @@ interface LoadedReminder {
  * Steps:
  * 1. resolve-template — Handlebars compilation
  * 2. generate-audio — ElevenLabs TTS + S3 upload
- * 3. make-call — Twilio call with presigned URL
+ * 3. make-call — Voice call with presigned URL (Twilio with Plivo failover)
  * 4. update-status — Update ScheduledReminder record
  */
 export const executeReminder = inngest.createFunction(
@@ -46,17 +48,23 @@ export const executeReminder = inngest.createFunction(
 
     // Load reminder with relations
     const reminder: LoadedReminder = await step.run("load-reminder", async () => {
-      const r = await db.scheduledReminder.findUnique({
-        where: { id: reminderId },
-        include: {
-          client: true,
-          template: true,
-          voice: true,
-        },
-      });
+      const [r, org] = await Promise.all([
+        db.scheduledReminder.findUnique({
+          where: { id: reminderId },
+          include: {
+            client: true,
+            template: true,
+            voice: true,
+          },
+        }),
+        organizationService.getById(orgId),
+      ]);
 
       if (!r) throw new Error(`Reminder ${reminderId} not found`);
       if (r.status === "CANCELLED") throw new Error("Reminder was cancelled");
+      if (!org?.outboundPhone) {
+        throw new Error("Organization must have an outbound phone number configured");
+      }
 
       // Mark as started
       await db.scheduledReminder.update({
@@ -74,6 +82,7 @@ export const executeReminder = inngest.createFunction(
         voiceProviderId: r.voice.providerId,
         appointmentTime: r.appointmentTime.toISOString(),
         orgId: r.orgId,
+        orgOutboundPhone: org.outboundPhone,
         userId: r.userId,
       };
     });
@@ -111,10 +120,9 @@ export const executeReminder = inngest.createFunction(
 
     // 3. Make call
     const callResult: { callSid: string; status: string } = await step.run("make-call", async () => {
-      const callProvider = createCallProviderService();
-      // TODO: Get org phone number from org settings
+      const callProvider = await createCallProviderWithFailover();
       return callProvider.createCall({
-        from: "+15551234567",
+        from: reminder.orgOutboundPhone,
         to: reminder.clientPhoneNumber,
         audioUrl,
       });

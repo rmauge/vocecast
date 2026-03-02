@@ -175,7 +175,8 @@ exports.Prisma.OrganizationScalarFieldEnum = {
   updatedAt: 'updatedAt',
   name: 'name',
   email: 'email',
-  phone: 'phone'
+  phone: 'phone',
+  outboundPhone: 'outboundPhone'
 };
 
 exports.Prisma.ClientScalarFieldEnum = {

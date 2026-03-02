@@ -21,6 +21,8 @@ export const transactionOutboxService = new PrismaTransactionOutboxService(db);
 export {
   createVoiceProviderService,
   createCallProviderService,
+  createCallProviderWithFailover,
   createStorageProviderService,
   createOrgServiceFactory,
+  callProviderHealthService,
 } from "./factory";

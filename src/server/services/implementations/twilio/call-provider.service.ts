@@ -4,6 +4,8 @@ import type {
   ICallProviderService,
   CreateCallInput,
   CallResult,
+  SendSmsInput,
+  SmsResult,
 } from "../../interfaces/call-provider.service";
 
 export class TwilioCallProviderService implements ICallProviderService {
@@ -36,5 +38,18 @@ export class TwilioCallProviderService implements ICallProviderService {
   async getCallStatus(callSid: string): Promise<string> {
     const call = await this.client.calls(callSid).fetch();
     return call.status;
+  }
+
+  async sendSms(input: SendSmsInput): Promise<SmsResult> {
+    const message = await this.client.messages.create({
+      from: input.from,
+      to: input.to,
+      body: input.body,
+    });
+
+    return {
+      messageSid: message.sid,
+      status: message.status,
+    };
   }
 }
