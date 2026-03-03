@@ -10,6 +10,9 @@ interface ServiceFactoryOptions {
   twilioAuthToken?: string;
   awsRegion?: string;
   awsBucket?: string;
+  awsEndpoint?: string;
+  awsAccessKeyId?: string;
+  awsSecretAccessKey?: string;
 }
 
 export const callProviderHealthService = new CallProviderHealthService();
@@ -76,12 +79,30 @@ export function createStorageProviderService(
 ): IStorageProviderService {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { S3StorageProviderService } = require("./implementations/aws/storage-provider.service") as {
-    S3StorageProviderService: new (region: string, bucket: string) => IStorageProviderService;
+    S3StorageProviderService: new (config: {
+      region: string;
+      bucket: string;
+      endpoint?: string;
+      accessKeyId?: string;
+      secretAccessKey?: string;
+      forcePathStyle?: boolean;
+    }) => IStorageProviderService;
   };
   const region = opts?.awsRegion ?? process.env.AWS_REGION;
   const bucket = opts?.awsBucket ?? process.env.AWS_S3_BUCKET;
+  const endpoint = opts?.awsEndpoint ?? process.env.AWS_ENDPOINT;
+  const accessKeyId = opts?.awsAccessKeyId ?? process.env.AWS_ACCESS_KEY_ID;
+  const secretAccessKey =
+    opts?.awsSecretAccessKey ?? process.env.AWS_SECRET_ACCESS_KEY;
   if (!region || !bucket) throw new Error("AWS S3 config is required");
-  return new S3StorageProviderService(region, bucket);
+  return new S3StorageProviderService({
+    region,
+    bucket,
+    endpoint,
+    accessKeyId,
+    secretAccessKey,
+    forcePathStyle: !!endpoint,
+  });
 }
 
 /**
@@ -109,6 +130,9 @@ export async function createOrgServiceFactory(orgId: string) {
       createStorageProviderService({
         awsRegion: keyMap.get("aws_region"),
         awsBucket: keyMap.get("aws_bucket"),
+        awsEndpoint: keyMap.get("aws_endpoint"),
+        awsAccessKeyId: keyMap.get("aws_access_key_id"),
+        awsSecretAccessKey: keyMap.get("aws_secret_access_key"),
       }),
   };
 }

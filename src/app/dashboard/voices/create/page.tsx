@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { PageHeader } from "~/components/layout/page-header";
 import { FormField } from "~/components/forms/form-field";
+import { VoiceSampleInput } from "~/components/audio/voice-sample-input";
 import { createVoiceCloneSchema } from "~/shared/schemas";
 import { api } from "~/trpc/react";
 import { zodFormValidator } from "~/shared/schemas/form-validator";
@@ -13,6 +15,10 @@ import { zodFormValidator } from "~/shared/schemas/form-validator";
 export default function CreateVoicePage() {
   const router = useRouter();
   const utils = api.useUtils();
+
+  const [audioFile, setAudioFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const createVoice = api.voiceClone.create.useMutation({
     onSuccess: async () => {
@@ -30,15 +36,50 @@ export default function CreateVoicePage() {
       onSubmit: zodFormValidator(createVoiceCloneSchema),
     },
     onSubmit: async ({ value }) => {
-      // TODO: First upload voice sample via /api/upload/voice,
-      // then create voice via ElevenLabs, then save metadata
-      // For now, placeholder with manual providerId
+      if (!audioFile) {
+        setUploadError("Please record or upload an audio sample.");
+        return;
+      }
+
+      // 1. Upload voice sample to S3
+      setIsUploading(true);
+      setUploadError(null);
+      try {
+        const formData = new FormData();
+        formData.append("file", audioFile);
+        formData.append("name", value.name);
+        if (value.description) {
+          formData.append("description", value.description);
+        }
+
+        const res = await fetch("/api/upload/voice-sample", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) {
+          const err = (await res.json()) as { error?: string };
+          setUploadError(err.error ?? "Upload failed");
+          return;
+        }
+      } catch {
+        setUploadError("Upload failed. Please try again.");
+        return;
+      } finally {
+        setIsUploading(false);
+      }
+
+      // 2. Create voice clone via tRPC
+      // TODO: Use uploaded sample to create clone via ElevenLabs
+      // and get a real providerId
       await createVoice.mutateAsync({
         ...value,
         providerId: "placeholder-" + Date.now(),
       });
     },
   });
+
+  const isBusy = isUploading || createVoice.isPending;
 
   return (
     <div className="space-y-6">
@@ -77,23 +118,28 @@ export default function CreateVoicePage() {
               )}
             </form.Field>
 
-            <div className="rounded-md border border-dashed p-6 text-center">
-              <p className="text-muted-foreground text-sm">
-                Voice sample upload will be available here.
-              </p>
-              <p className="text-muted-foreground text-xs">
-                Record or upload an audio file to create a voice clone.
-              </p>
-            </div>
+            <VoiceSampleInput
+              value={audioFile}
+              onChange={(file) => {
+                setAudioFile(file);
+                setUploadError(null);
+              }}
+              error={uploadError ?? undefined}
+            />
 
             <div className="flex gap-2">
-              <Button type="submit" disabled={createVoice.isPending}>
-                {createVoice.isPending ? "Creating..." : "Create Voice"}
+              <Button type="submit" disabled={isBusy || !audioFile}>
+                {isUploading
+                  ? "Uploading..."
+                  : createVoice.isPending
+                    ? "Creating..."
+                    : "Create Voice"}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => router.back()}
+                disabled={isBusy}
               >
                 Cancel
               </Button>

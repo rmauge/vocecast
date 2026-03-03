@@ -10,13 +10,33 @@ import type {
   UploadInput,
 } from "../../interfaces/storage-provider.service";
 
+export interface S3StorageProviderConfig {
+  region: string;
+  bucket: string;
+  endpoint?: string;
+  accessKeyId?: string;
+  secretAccessKey?: string;
+  forcePathStyle?: boolean;
+}
+
 export class S3StorageProviderService implements IStorageProviderService {
   private readonly client: S3Client;
   private readonly bucket: string;
 
-  constructor(region: string, bucket: string) {
-    this.client = new S3Client({ region });
-    this.bucket = bucket;
+  constructor(config: S3StorageProviderConfig) {
+    this.bucket = config.bucket;
+    this.client = new S3Client({
+      region: config.region,
+      ...(config.endpoint && { endpoint: config.endpoint }),
+      ...(config.forcePathStyle && { forcePathStyle: true }),
+      ...(config.accessKeyId &&
+        config.secretAccessKey && {
+          credentials: {
+            accessKeyId: config.accessKeyId,
+            secretAccessKey: config.secretAccessKey,
+          },
+        }),
+    });
   }
 
   async upload(

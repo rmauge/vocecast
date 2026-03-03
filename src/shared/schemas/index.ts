@@ -3,4 +3,5 @@ export * from "./template.schema";
 export * from "./voice.schema";
 export * from "./messaging.schema";
 export * from "./organization.schema";
+export * from "./voice-sample.schema";
 export * from "./common.schema";

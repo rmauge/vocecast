@@ -6,6 +6,7 @@ import { voiceCloneRouter } from "~/server/api/routers/voiceClone";
 import { voiceRouter } from "~/server/api/routers/voice";
 import { messagingRouter } from "~/server/api/routers/messaging";
 import { schedulerRouter } from "~/server/api/routers/scheduler";
+import { voiceSampleRouter } from "~/server/api/routers/voiceSample";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -22,6 +23,7 @@ export const appRouter = createTRPCRouter({
   voice: voiceRouter,
   messaging: messagingRouter,
   scheduler: schedulerRouter,
+  voiceSample: voiceSampleRouter,
 });
 
 // export type definition of API

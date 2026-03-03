@@ -1,7 +1,7 @@
 The application relies on several third party providers.
 Services include
 * Voice and SMS: Perform reminders such as making calls and sending messages
-* Object storage: Saved cloned voice messages 
+* Object storage: Save cloned voice messages and voice sample recordings
 * Payments
 * Authentication
 
@@ -52,4 +52,39 @@ It will use a mature library for forms ex Tanstack Forms. List and detail, creat
 
 It should use a great component for recording voice in the browser then sending it to the voice clone provider.
 
+## Object Storage
 
+S3-compatible object storage is used for audio files (voice samples, generated messages).
+
+### Storage Key Format
+
+Files are stored at: `{orgId}/{userId}/{yyyy}/{mm}/{dd}/{uuid}.{ext}`
+
+This organizes files by tenant, user, and date for easy browsing and lifecycle management.
+
+### MinIO for Local Development
+
+In development, MinIO provides an S3-compatible API locally. Run `docker compose up -d` to start it:
+- **S3 API**: `http://localhost:9000`
+- **Console UI**: `http://localhost:9001` (minioadmin/minioadmin)
+- The `vocecast` bucket is auto-created on first start
+
+The `AWS_ENDPOINT` env var tells the S3 client to use MinIO instead of AWS. In production, omit this variable to use standard AWS S3.
+
+### Environment Variables
+
+```
+AWS_REGION="us-east-1"
+AWS_S3_BUCKET="vocecast"
+AWS_ENDPOINT="http://localhost:9000"       # MinIO; omit for AWS
+AWS_ACCESS_KEY_ID="minioadmin"
+AWS_SECRET_ACCESS_KEY="minioadmin"
+```
+
+### Voice Sample Upload Flow
+
+1. Browser records audio via MediaRecorder API
+2. Audio is sent as `multipart/form-data` to `POST /api/upload/voice-sample`
+3. API route authenticates, validates file (max 10MB, wav/webm), uploads to S3
+4. A `VoiceSample` DB record is created with the `storageKey`
+5. Playback URLs are generated on demand via presigned URLs (tRPC `voiceSample.getPlaybackUrl`)

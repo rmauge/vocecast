@@ -7,6 +7,7 @@ export type { IVoiceCloneService, CreateVoiceCloneInput, UpdateVoiceCloneInput }
 export type { IVoiceProviderService, VoiceInfo, CreateVoiceInput } from "./voice-provider.service";
 export type { ICallProviderService, CreateCallInput, CallResult } from "./call-provider.service";
 export type { IStorageProviderService, UploadInput } from "./storage-provider.service";
+export type { IVoiceSampleService, CreateVoiceSampleInput, UpdateVoiceSampleInput } from "./voice-sample.service";
 export type { ITransactionOutboxService, CreateTransactionInput } from "./transaction-outbox.service";
 export type { PaginatedResult } from "./common";
 export { DEFAULT_PAGE_SIZE } from "./common";

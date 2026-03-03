@@ -27,9 +27,12 @@ export const env = createEnv({
     PLIVO_AUTH_ID: z.string().optional(),
     PLIVO_AUTH_TOKEN: z.string().optional(),
 
-    // AWS S3
+    // AWS S3 / MinIO
     AWS_S3_BUCKET: z.string().optional(),
     AWS_REGION: z.string().optional(),
+    AWS_ENDPOINT: z.string().optional(),
+    AWS_ACCESS_KEY_ID: z.string().optional(),
+    AWS_SECRET_ACCESS_KEY: z.string().optional(),
 
     // Inngest
     INNGEST_EVENT_KEY: z.string().optional(),
@@ -63,6 +66,9 @@ export const env = createEnv({
     PLIVO_AUTH_TOKEN: process.env.PLIVO_AUTH_TOKEN,
     AWS_S3_BUCKET: process.env.AWS_S3_BUCKET,
     AWS_REGION: process.env.AWS_REGION,
+    AWS_ENDPOINT: process.env.AWS_ENDPOINT,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     INNGEST_EVENT_KEY: process.env.INNGEST_EVENT_KEY,
     INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,
   },
